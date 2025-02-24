@@ -34,7 +34,7 @@ def preprocess_text(files, size, overlap):
 
                         cleaned_text = ' '.join(page_text.split())
                         paragraphs.append(cleaned_text)
-                        st.write(f"Processed PDF page {i+1}, extracted {len(page_text)} characters")
+                        # st.write(f"Processed PDF page {i+1}, extracted {len(page_text)} characters")
                         
             elif file.name.endswith(".docx"):
                 docx = DocxDocument(file)
@@ -43,7 +43,7 @@ def preprocess_text(files, size, overlap):
                     if para.text.strip():
                         full_text += para.text.strip() + "\n\n"
                 paragraphs.append(full_text)
-                st.write(f"Processed DOCX file, extracted {len(full_text)} characters")
+                # st.write(f"Processed DOCX file, extracted {len(full_text)} characters")
                 
         except Exception as e:
             st.error(f"Error processing file {file.name}: {str(e)}")
@@ -51,7 +51,7 @@ def preprocess_text(files, size, overlap):
     
     # Clean paragraphs
     paragraphs = [para for para in paragraphs if para.strip()]
-    st.write(f"Total paragraphs after cleaning: {len(paragraphs)}")
+    # st.write(f"Total paragraphs after cleaning: {len(paragraphs)}")
     
     # Convert to Langchain Document objects
     docs = [LangchainDocument(page_content=para) for para in paragraphs]
@@ -69,12 +69,12 @@ def preprocess_text(files, size, overlap):
     st.write(f"Created {len(text_chunks)} text chunks")
     
     # Debug: Print sample chunks
-    if text_chunks:
-        st.write("Sample chunks (first 5):")
-        for i, chunk in enumerate(text_chunks[:5]):
-            # Clean up the chunk display
-            sample_text = chunk.page_content[:300].strip()
-            st.write(f"Chunk {i+1}: {sample_text}...")
+    # if text_chunks:
+    #     st.write("Sample chunks (first 5):")
+    #     for i, chunk in enumerate(text_chunks[:5]):
+    #         # Clean up the chunk display
+    #         sample_text = chunk.page_content[:300].strip()
+    #         st.write(f"Chunk {i+1}: {sample_text}...")
     
     return text_chunks
 
