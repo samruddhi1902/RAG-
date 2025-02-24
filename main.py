@@ -51,6 +51,20 @@ if not st.session_state.preprocessing_done:
     if selected_embedding_model:
         st.markdown(f"*Selected Model:* **{selected_embedding_model}**")
 
+    st.subheader("Add Links for Web Scraping")
+    links = []  # To store all the links
+    link_count = st.number_input("Number of Links", min_value=0, max_value=50, value=1, step=1)
+
+    # Generate dynamic text inputs for links
+    for i in range(link_count):
+        link = st.text_input(f"Enter Link {i+1}", key=f"link_{i}")
+        if link:
+            links.append(link)
+            if validators.url(link):  # Validate link format
+                links.append(link)
+            else:
+                st.error(f"Invalid URL format for Link {i + 1}")
+
     chunk_size = st.number_input("**Enter chunk size:**", min_value=1, value=2000, step=1)
     chunk_overlap = st.number_input("**Enter chunk overlap:**", min_value=1, value=500, step=1)
 

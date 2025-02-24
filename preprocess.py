@@ -1,5 +1,5 @@
 import streamlit as st
-import chromadb
+# import chromadb
 import os
 from PyPDF2 import PdfReader
 from docx import Document as DocxDocument
