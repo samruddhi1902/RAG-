@@ -22,7 +22,6 @@ def preprocess_text(files, size, overlap):
     
     paragraphs = []
     
-    # Process each file
     for file in files:
         try:
             st.write(f"Processing file: {file.name}")
@@ -32,18 +31,19 @@ def preprocess_text(files, size, overlap):
                 for i, page in enumerate(reader.pages):
                     page_text = page.extract_text()
                     if page_text:
-                        # Clean the text but keep paragraphs separate
-                        cleaned_text = ' '.join(page_text.split())  # Remove extra whitespace while keeping words together
+
+                        cleaned_text = ' '.join(page_text.split())
                         paragraphs.append(cleaned_text)
                         st.write(f"Processed PDF page {i+1}, extracted {len(page_text)} characters")
                         
             elif file.name.endswith(".docx"):
                 docx = DocxDocument(file)
-                for paragraph in docx.paragraphs:
-                    if paragraph.text.strip():
-                        cleaned_text = ' '.join(paragraph.text.split())
-                        paragraphs.append(cleaned_text)
-                st.write(f"Processed DOCX, extracted {len(paragraphs)} paragraphs")
+                full_text = ""
+                for para in docx.paragraphs:
+                    if para.text.strip():
+                        full_text += para.text.strip() + "\n\n"
+                paragraphs.append(full_text)
+                st.write(f"Processed DOCX file, extracted {len(full_text)} characters")
                 
         except Exception as e:
             st.error(f"Error processing file {file.name}: {str(e)}")
@@ -56,7 +56,6 @@ def preprocess_text(files, size, overlap):
     # Convert to Langchain Document objects
     docs = [LangchainDocument(page_content=para) for para in paragraphs]
     
-    # Configure the text splitter
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=size,
         chunk_overlap=overlap,
