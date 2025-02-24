@@ -129,16 +129,33 @@ def inference_pinecone(chat_model, question,embedding_model_global, pinecone_ind
 
             Question: {question}
 
+            Answer to general conversation texts like hello,bye,etc
             **Strict Instructions to Avoid Hallucination:**
-            1. Only answer using the provided context. If the information is not available, clearly state: "The provided information does not contain details on this topic."
+            1. Only answer using the provided context.
             2. Do not assume or generate information beyond what is explicitly mentioned in the context.
             3. Always quote numerical values, interest rates, and tenure periods exactly as found in the context.
             4. If multiple interest rates exist, specify whether they apply to general citizens or senior citizens.
             5. For yield-related questions, provide both the FD rate and yield percentage.
+            6.If the question requires a numerical calculation (e.g., FD maturity, tax deduction), perform the necessary calculation.**
+            7.Use the compound interest formula where required:**  
+            [A = P * r * t
+            ]
+            where:  
+            - P = Principal amount  
+            - r = Interest rate (in decimal)  
+            - n = Compounding frequency per year (1 for annual, 12 for monthly)  
+            - t = Time in years  
+            8. For tax-related queries**, apply TDS deduction rules:
+            - If FD interest **exceeds ₹40,000 (₹50,000 for seniors)**, deduct **10% TDS**.
+            - If PAN is missing, apply **20% TDS**.
+            4. If multiple interest rates exist**, clearly specify whether they apply to **general citizens** or **senior citizens**.
+            5. For yield-related questions, provide both FD rate and yield percentage.
+            If the question asks for an interest rate for a **specific tenure (e.g., 37 months)**, but the provided information only contains **range-based tenures**, find the correct range and use the corresponding interest rate.
+            2. Example: If the tenure is **37 months**, and the provided range is **36-60 months**, return the interest rate for **36-60 months**.
+            3. If multiple ranges match, return the rate from the most relevant range.
             6. Maintain clarity and conciseness, avoiding unnecessary details.
 
-            **Response:**
-            """
+            **Response:**"""
 
   llm = ChatTogether(api_key="c51c9bcaa6bf7fae3ce684206311564828c13fa2e91553f915fee01d517ccee9",
                   model=chat_model,  )
