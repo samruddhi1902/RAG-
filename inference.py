@@ -47,7 +47,7 @@ def inference_faiss(chat_model, question, embedding_model_global, index, docstor
 
             Context: {context}
 
-            Chat History: {formatted_history}
+            Chat History: {history}
 
             Question: {question}
 
